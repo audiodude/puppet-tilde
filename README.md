@@ -4,7 +4,7 @@ This is an experimental, alpha Puppet module for setting up an ubuntu server in
 the style of [tilde.club](http://tilde.club).
 
 What is in master is generally guaranteed to have been tested casually
-on an ec2 micro running Ubuntu 14.04, but aside from that, there are
+on an ec2 micro running Ubuntu 14.04 at [tilde.town](http://tilde.town), but aside from that, there are
 no guarantees about the code. YMMV. I'm trying to keep the README up
 to date as I change things / add features.
 
@@ -23,35 +23,6 @@ to date as I change things / add features.
  * `cd /etc/puppet/modules; git clone https://github.com/nathanielksmith/puppet-tilde.git tilde`
  * edit [site.pp](https://github.com/nathanielksmith/puppet-tilde/tree/master/examples/site.pp)
  * `puppet agent -t`
-
-
-## Quota support
-
-This module enables 3mb user quotas for all non-system users. You'll
-need to add the usrquota option to your / mount with something like
-this in your `site.pp`, though, for it to work:
-
-    mount { '/':
-        ensure  => 'mounted',
-        device  => 'LABEL=cloudimg-rootfs',
-        dump    => '0',
-        fstype  => 'ext4',
-        options => 'defaults,discard,usrquota',
-        pass    => '0',
-        target  => '/etc/fstab',
-      }
-    }
-
-If you **do not want disk quotas**, include the tilde class like this
-in your `site.pp`:
-
-    class { 'tilde':
-        use_quota => false,
-    }
-
-or configure common.yaml with
-
-    tilde::use_quota: false
 
 ## Adding Users
 
@@ -83,6 +54,47 @@ or _tilde.farm_ or _drawbridge.club_) and sets up an nginx vhost with:
  domain>/index.html`)
  * user directories (`/~<username>`) which map to /home/<username>/public_html
  * server names $hostname and www.$hostname
+
+## Quota support
+
+This module enables 3mb user quotas for all non-system users. You'll
+need to add the usrquota option to your / mount with something like
+this in your `site.pp`, though, for it to work:
+
+    mount { '/':
+        ensure  => 'mounted',
+        device  => 'LABEL=cloudimg-rootfs',
+        dump    => '0',
+        fstype  => 'ext4',
+        options => 'defaults,discard,usrquota',
+        pass    => '0',
+        target  => '/etc/fstab',
+      }
+    }
+
+If you **do not want disk quotas**, include the tilde class like this
+in your `site.pp`:
+
+    class { 'tilde':
+        use_quota => false,
+    }
+
+or configure common.yaml with
+
+    tilde::use_quota: false
+
+## IRC
+
+The module sets up ngircd for you.
+
+ * localhost only
+ * "irc" alias added to users' .bashrc
+ * per-user irssi config this will auto-connect to the
+   server and auto-join #<hostname> where hostname is a .-less string
+   substitution of the hostname you specified as `tilde::hostname`.
+
+It does **not** set up an operator. IRC governance is up to the
+autonomous collective to determine.
 
 ## Authors
 
