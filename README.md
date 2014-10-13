@@ -14,13 +14,16 @@ to date as I change things / add features.
 
  * Install puppet and puppetmaster (they can be on the same
    server). 3.4.x+ is required.
- * `puppet module install nginx`
+ * `puppet module install jfryman-nginx`
+ * `puppet module install camptocamp-postfix`
  * Set up hiera:
   * add a [hiera.yaml](https://github.com/nathanielksmith/puppet-tilde/tree/master/examples/hiera.yaml) to `/etc/puppet/`
   * `ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml`
   * `mkdir /etc/puppet/hieradata`
   * add and **configure** [common.yaml](https://github.com/nathanielksmith/puppet-tilde/tree/master/examples/common.yaml) to `/etc/puppet/hieradata/`
- * `cd /etc/puppet/modules; git clone https://github.com/nathanielksmith/puppet-tilde.git tilde`
+ * `cd /etc/puppet/modules`
+ * `git clone https://github.com/nathanielksmith/puppet-tilde.git tilde`
+ * `git clone https://github.com/nathanielksmith/puppet-ngircd ngircd`
  * edit [site.pp](https://github.com/nathanielksmith/puppet-tilde/tree/master/examples/site.pp)
  * `puppet agent -t`
 
@@ -55,6 +58,34 @@ or _tilde.farm_ or _drawbridge.club_) and sets up an nginx vhost with:
  * user directories (`/~<username>`) which map to /home/<username>/public_html
  * server names $hostname and www.$hostname
 
+## IRC
+
+The module sets up ngircd for you.
+
+ * localhost only
+ * "irc" alias added to users' .bashrc
+ * per-user irssi config this will auto-connect to the
+   server and auto-join #<hostname> where hostname is a .-less string
+   substitution of the hostname you specified as `tilde::hostname`.
+
+It does **not** set up an operator. IRC governance is up to the
+autonomous collective to determine.
+
+## Mail
+
+The module sets up postfix for you. Just like tilde.club, it's local
+mail only. Alpine and mutt are installed by default.
+
+## MotD
+
+There is basic Message of the Day support. To customize the motd, make
+a branch of the checked out puppet module and edit
+`templates/motd.erb`. The default template just has a basic cowsay
+with a few instructions (and shows your server's hostname).
+
+A `motd` alias that just runs `cat /etc/motd` is also added by the
+aliases file in skel.
+
 ## Quota support
 
 This module enables 3mb user quotas for all non-system users. You'll
@@ -82,19 +113,6 @@ in your `site.pp`:
 or configure common.yaml with
 
     tilde::use_quota: false
-
-## IRC
-
-The module sets up ngircd for you.
-
- * localhost only
- * "irc" alias added to users' .bashrc
- * per-user irssi config this will auto-connect to the
-   server and auto-join #<hostname> where hostname is a .-less string
-   substitution of the hostname you specified as `tilde::hostname`.
-
-It does **not** set up an operator. IRC governance is up to the
-autonomous collective to determine.
 
 ## Authors
 

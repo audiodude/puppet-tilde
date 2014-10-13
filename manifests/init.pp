@@ -1,6 +1,7 @@
 class tilde ($use_quota = true, $addtl_packages = [], $users, $hostname) {
 
   include tilde::packages
+  include tilde::mail
   include tilde::skel
   include tilde::irc
 
@@ -23,6 +24,14 @@ class tilde ($use_quota = true, $addtl_packages = [], $users, $hostname) {
 
   package { $addtl_packages:
     ensure => present,
+  }
+
+  file { "/etc/motd":
+    ensure => file,
+    owner => root,
+    group => root,
+    mode => '0665',
+    content => template("${module_name}/motd.erb")
   }
 
   create_resources(tilde::user, $users)
