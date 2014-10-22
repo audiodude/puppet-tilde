@@ -29,18 +29,18 @@ class tilde::nntp ($hostname) {
     hour => 23,
   }
 
-  exec { 'local.tilde':
-    command => '/usr/sbin/ctlinnd newgroup local.tilde',
-    refreshonly => true,
-  }
+  # exec { 'local.tilde':
+  #   command => '/usr/sbin/ctlinnd newgroup local.tilde',
+  #   refreshonly => true,
+  # }
 
-  exec { 'local.html':
-    command => '/usr/sbin/ctlinnd newgroup local.tilde',
-    refreshonly => true,
-  }
+  # exec { 'local.html':
+  #   command => '/usr/sbin/ctlinnd newgroup local.tilde',
+  #   refreshonly => true,
+  # }
 
-  exec { 'local.music':
-    command => '/usr/sbin/ctlinnd newgroup local.tilde',
-    refreshonly => true,
-  }
+  # exec { 'local.music':
+  #   command => '/usr/sbin/ctlinnd newgroup local.tilde',
+  #   refreshonly => true,
+  # }
 }
