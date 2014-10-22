@@ -2,7 +2,7 @@ class tilde::nntp ($hostname) {
 
   package { ['inn2', 'slrn']:
     ensure => installed,
-    notify => [ Exec['local.tilde'], Exec['local.html'], Exec['local.music'] ],
+  # notify => [ Exec['local.tilde'], Exec['local.html'], Exec['local.music'] ],
   }
 
   file { '/etc/news/inn.conf':
